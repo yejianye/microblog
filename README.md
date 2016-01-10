@@ -1,6 +1,11 @@
 Web application: Micro blog 
 ===========================
-This application is a simple version of Twitter used to validate various ideas and architectures in web backend development.
+This application is a micro-blog with very basic features such as posting feed and follow a friend. My goal is to use it as an example project to test out various ideas and architectures in web backend development including
+- Design abstraction layers and APIs
+- Distributed cache
+- NoSQL
+- Database sharding
+etc
 
 The features of this simple microblog application includes
 - Create a new user
@@ -35,7 +40,7 @@ Both `username` and `email` needs be unique
 ### GET /users/<user-id>/followers
 Get a list of users that follow specific user
 
-### GET /users/<user-id>/following
+### GET /users/<user-id>/followings
 Get a list of users that specific user is following
 
 ### POST /users/<user-id>/follow/<other-id>
