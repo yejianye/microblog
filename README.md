@@ -65,4 +65,11 @@ Post a new feed
 
 mbref:
 -----
-This is a naive implementation used as a baseline for other implementations.
+*mbref* is abbreviate for *micro-blog reference model*. This is a naive implementation used as a baseline for other implementations.
+
+It has a very typical 3-layer architecture
+- `mbref.models`, model layer implemented with SQLAlchemy
+- `mbref.logic`, application logic layer
+- `mbref.www.api`, restful API implementing [micro-blog API spec](#api-spec)
+
+I also wrote a client `mbref.client` to make restful API calls. And all tests in `mbref.test` are testing against restful API by using this client. The client and its tests only cares about the API, but not implementation details. Thus, they could be reused by other implementations.
