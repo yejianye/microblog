@@ -26,13 +26,13 @@ def create_user():
     payload = request.get_json()
     try:
         Schema({
-            'username': str,
-            'email': str,
-            'password': str,
-            Optional('bio'): str,
+            'username': unicode,
+            'email': unicode,
+            'password': unicode,
+            Optional('bio'): unicode,
             Optional('time_created'): int
             }).validate(payload)
-    except SchemaError:
+    except SchemaError, e:
         return abort(400)
     return logic.create_user(**payload)
 
@@ -79,7 +79,7 @@ def post_feed():
     try:
         Schema({
             'user_id': int,
-            'content': str,
+            'content': unicode,
             Optional('time_created'): int
             }).validate(payload)
     except SchemaError:
