@@ -60,3 +60,30 @@ def test_follow():
     c.unfollow(u1['id'], u3['id'])
     followings = c.get_followings(u1['id'])
     assert u3['id'] not in [x['id'] for x in followings]
+
+def test_feeds():
+    u1 = c.create_user(**_mock_user())
+    u2 = c.create_user(**_mock_user())
+    u3 = c.create_user(**_mock_user())
+    c.follow(u3['id'], u1['id'])
+    c.follow(u3['id'], u2['id'])
+
+    # Reference time: 2016/01/14 6:45PM
+    ref_ts = 1452768307
+
+    # post feed and get feed
+    f1 = c.post_feed(u1['id'], content='feed1', time_created=ref_ts - 100)
+    assert c.get_feed(f1['id'])['content'] == 'feed1'
+
+    # get user feed stream
+    c.post_feed(u1['id'], content='feed2', time_created=ref_ts - 99)
+    result = c.get_user_feeds(u1['id'])
+    assert result[0]['content'] == 'feed2'
+    assert result[1]['content'] == 'feed1'
+
+    # friend feed stream
+    c.post_feed(u2['id'], content='feed3', time_created=ref_ts - 98)
+    result = c.get_friend_feeds(u3['id'])
+    assert result[0]['content'] == 'feed3'
+    assert result[1]['content'] == 'feed2'
+    assert result[2]['content'] == 'feed1'

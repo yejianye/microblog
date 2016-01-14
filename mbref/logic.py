@@ -56,7 +56,8 @@ def unfollow(user_id, other_id):
         return False
 
 def get_user_feeds(user_id):
-    feeds = Feed.query.filter_by(user_id = user_id).all()
+    feeds = (Feed.query.filter_by(user_id = user_id)
+             .order_by(Feed.time_created.desc()).all())
     return [f.to_dict() for f in feeds]
 
 def get_friend_feeds(user_id):

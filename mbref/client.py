@@ -22,12 +22,12 @@ class Client(object):
     def get_user(self, user_id):
         return self._get('/users/{}'.format(user_id))
 
-    def create_user(self, username, email, password, bio=''):
+    def create_user(self, username, email, password, **kwargs):
         return self._post('/users/',
                           username = username,
                           email = email,
                           password = password,
-                          bio = bio)
+                          **kwargs)
 
     def follow(self, user_id, other_id):
         return self._post('/users/{}/follow/{}'.format(user_id, other_id))
@@ -40,6 +40,21 @@ class Client(object):
 
     def get_followings(self, user_id):
         return self._get('/users/{}/followings'.format(user_id))
+
+    def post_feed(self, user_id, content, **kwargs):
+        return self._post('/feeds/',
+                          user_id = user_id,
+                          content = content,
+                          **kwargs)
+
+    def get_feed(self, feed_id):
+        return self._get('/feeds/{}'.format(feed_id))
+
+    def get_user_feeds(self, user_id):
+        return self._get('/users/{}/feeds'.format(user_id))
+
+    def get_friend_feeds(self, user_id):
+        return self._get('/users/{}/friend-feeds'.format(user_id))
 
 if __name__ == '__main__':
     import random
