@@ -1,2 +1,3 @@
 #pattern  filter=crypt diff=crypt
-mbref/test.txt  filter=crypt diff=crypt
+mbref/conf/perf.py  filter=crypt diff=crypt
+ansible/vars/aws.yml  filter=crypt diff=crypt
