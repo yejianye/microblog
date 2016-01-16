@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-from mbref.app import db
+from mbref.app import db, create_app
 
-# Register models
-import mbref.models.user
-import mbref.models.feed
-
-db.drop_all()
-db.create_all()
+app = create_app()
+with app.app_context():
+    db.drop_all()
+    db.create_all()
