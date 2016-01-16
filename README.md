@@ -73,3 +73,7 @@ It has a very typical 3-layer architecture
 - `mbref.www.api`, restful API implementing [micro-blog API spec](#api-spec)
 
 I also wrote a client `mbref.client` to make restful API calls. And all tests in `mbref.test` are testing against restful API by using this client. The client and its tests only cares about the API, but not implementation details. Thus, they could be reused by other implementations.
+
+Additional notes
+----------------
+For security reasons, some of config files that contains AWS credentials or DB passwords are encrypted.
