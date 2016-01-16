@@ -1,0 +1,2 @@
+#pattern  filter=crypt diff=crypt
+mbref/test.txt  filter=crypt diff=crypt
