@@ -1,4 +1,4 @@
-from mbref.app import db
+from mbref.extensions import db
 
 class Feed(db.Model):
     __tablename__ = 'Feed'

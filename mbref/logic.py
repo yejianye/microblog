@@ -2,7 +2,7 @@
 import time
 from hashlib import sha1
 
-from mbref.app import db
+from mbref.extensions import db
 from mbref.models.user import User, FollowRelation
 from mbref.models.feed import Feed
 
@@ -81,3 +81,7 @@ def post_feed(user_id, content, time_created=None):
     db.session.add(feed)
     db.session.commit()
     return feed.to_dict()
+
+def clear_all():
+    db.drop_all()
+    db.create_all()

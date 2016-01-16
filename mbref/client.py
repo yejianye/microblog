@@ -56,6 +56,9 @@ class Client(object):
     def get_friend_feeds(self, user_id):
         return self._get('/users/{}/friend-feeds'.format(user_id))
 
+    def clear_all(self):
+        return self._post('/clear-all')
+
 if __name__ == '__main__':
     import random
     from pprint import pprint
