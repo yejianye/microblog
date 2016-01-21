@@ -13,3 +13,5 @@ def create_app():
     load_views(app, mbref.www.api)
     db.init_app(app)
     return app
+
+default_app = create_app()

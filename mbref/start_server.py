@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Start microblog API server"""
 import argparse
-import mbref.app
+from mbref.app import default_app
 
 def gevent_server(app, port):
     import gevent.monkey
@@ -18,8 +18,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.gevent:
-        app = mbref.app.create_app()
-        gevent_server(app, args.port)
+        gevent_server(default_app, args.port)
     else:
-        app = mbref.app.create_app()
-        app.run(host='0.0.0.0', port=args.port)
+        default_app.run(host='0.0.0.0', port=args.port)

@@ -16,7 +16,7 @@
       rules: "{{ item.rules }}"
     with_items: security_group
 
-  # Instances
+  # EC2 Instances
   - name: Launch instances 
     ec2:
       key_name: "{{ default_key_name }}"
@@ -63,20 +63,21 @@
     with_items: launched_instances.results
     tags: ['route53']
 
-  - rds:
-      command: create
-      instance_name: "{{ item.name }}"
-      db_engine: "{{ item.db_engine }}"
-      size: "{{ item.size }}"
-      instance_type: "{{ item.instance_type }}"
-      vpc_security_groups: "{{ item.security_groups }}"
-      subnet: "{{ rds_subnet }}"
-      username: "{{ item.db_user }}"
-      password: "{{ item.db_password }}"
-      region: "{{ region }}"
-      tags:
-        Name: "{{ item.name }}"
-        env: "{{ env }}"
-    with_items: rds_instances
-    tags: ['rds']
-    register: launched_rds
+  # RDS
+
+  # - rds:
+  #     command: restore
+  #     instance_name: "{{ item.name }}"
+  #     instance_type: "{{ item.instance_type }}"
+  #     subnet: "{{ rds_subnet }}"
+  #     region: "{{ region }}"
+  #     snapshot: "{{ item.snapshot }}"
+  #     tags:
+  #       Name: "{{ item.name }}"
+  #       env: "{{ env }}"
+  #   with_items: rds_instances
+  #   tags: ['rds']
+  #   register: launched_rds
+
+  # - debug: var=launched_rds
+  #   tags: ['rds']

@@ -29,6 +29,6 @@ class User(db.Model):
 class FollowRelation(db.Model):
     __tablename__ = 'FollowRelation'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    follower_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, index=True)
+    follower_id = db.Column(db.Integer, index=True)
 

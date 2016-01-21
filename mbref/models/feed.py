@@ -3,7 +3,7 @@ from mbref.extensions import db
 class Feed(db.Model):
     __tablename__ = 'Feed'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, index=True)
     content = db.Column(db.String(1024))
     time_created = db.Column(db.Integer)
 

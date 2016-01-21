@@ -8,7 +8,7 @@ import logging.config
 from threading import Thread
 from Queue import Queue, Empty
 
-from mbref.client import Client
+from mbutils.client import Client
 
 class Executor(Thread):
     def __init__(self, client, jobs):

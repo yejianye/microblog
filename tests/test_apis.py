@@ -2,7 +2,7 @@ import random
 
 import requests
 
-from mbref.client import Client
+from mbutils.client import Client
 
 api_url = 'http://localhost:7431'
 c = Client(api_url)
