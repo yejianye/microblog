@@ -25,6 +25,11 @@ class Executor(Thread):
             except Empty:
                 break
 
+def _dry_run(client, jobs):
+    for job in jobs:
+        cmd = getattr(client, job['cmd'])
+        cmd(*job['args'], **job['kwargs'])
+
 def _monitor(jobs):
     while jobs.qsize() > 0:
         logging.info('%d jobs left...', jobs.qsize())
@@ -96,7 +101,10 @@ def write_test(client, thread_count, test_size):
                   user_id = uid,
                   other_id = random.randint(1, base_count+1)
                   ) for _ in xrange(random.randint(1,3))]
-    return _execute(client, _list2queue(jobs), thread_count)
+    if client.dry_run:
+        _dry_run(client, jobs)
+    else:
+        return _execute(client, _list2queue(jobs), thread_count)
 
 def read_test(client, thread_count, test_size):
     base_count = {
@@ -120,7 +128,10 @@ def read_test(client, thread_count, test_size):
         [_add_job(jobs, 'get_followers', uid) for _ in _repeat()]
         [_add_job(jobs, 'get_followings', uid) for _ in _repeat()]
     random.shuffle(jobs)
-    return _execute(client, _list2queue(jobs), thread_count)
+    if client.dry_run:
+        _dry_run(client, jobs)
+    else:
+        return _execute(client, _list2queue(jobs), thread_count)
 
 def init_logger():
     log_config = {
@@ -172,18 +183,21 @@ def main():
     #                     default=False,
     #                     help="Print URLs instead of sending GET requests. Only use with --read-test")
     args = parser.parse_args()
-    init_logger()
+    if not args.dry_run:
+        init_logger()
     client = Client(args.api_url, args.dry_run)
     if args.write_test:
         perf = write_test(client, args.concurrency, args.test_size)
-        print 'Write test result:'
-        print 'Completed {job_count} requests in {time} seconds'.format(**perf)
-        print 'Avg req/sec: {}\n'.format(perf['job_count'] / perf['time'])
+        if perf:
+            print 'Write test result:'
+            print 'Completed {job_count} requests in {time} seconds'.format(**perf)
+            print 'Avg req/sec: {}\n'.format(perf['job_count'] / perf['time'])
     if args.read_test:
         perf = read_test(client, args.concurrency, args.test_size)
-        print 'Read test result:'
-        print 'Completed {job_count} requests in {time} seconds'.format(**perf)
-        print 'Avg req/sec: {}\n'.format(perf['job_count'] / perf['time'])
+        if perf:
+            print 'Read test result:'
+            print 'Completed {job_count} requests in {time} seconds'.format(**perf)
+            print 'Avg req/sec: {}\n'.format(perf['job_count'] / perf['time'])
 
 if __name__ == '__main__':
     main()
