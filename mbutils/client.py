@@ -1,12 +1,22 @@
 #!/usr/bin/env python
+import json
+import urllib
+
 import requests
 
 class Client(object):
-    def __init__(self, api_url):
+    def __init__(self, api_url, dry_run=False):
         self.api_url = api_url
+        self.dry_run = dry_run
         self.session = requests.Session()
 
     def _get(self, path, **kwargs):
+        if self.dry_run:
+            print 'GET {}{}?{}'.format(
+                self.api_url,
+                path,
+                urllib.urlencode(kwargs))
+            return
         resp = self.session.get(self.api_url + path, params=kwargs)
         if resp.status_code == 200:
             return resp.json()
@@ -14,6 +24,12 @@ class Client(object):
             return {'err_code': resp.status_code, 'err_msg': resp.content}
 
     def _post(self, path, **kwargs):
+        if self.dry_run:
+            print 'POST {}{} {}'.format(
+                self.api_url,
+                path,
+                json.dumps(kwargs))
+            return
         resp = self.session.post(self.api_url + path, json=kwargs)
         if resp.status_code == 200:
             return resp.json()

@@ -165,9 +165,15 @@ def main():
                         help="Size of the benchmark test (small/medium/large)")
     parser.add_argument("--api-url", default='http://localhost:7431',
                         help="Base URL for microblog API")
+    parser.add_argument("--dry-run", action='store_true',
+                        default=False,
+                        help="Dry run")
+    # parser.add_argument("--print-urls", action='store_true',
+    #                     default=False,
+    #                     help="Print URLs instead of sending GET requests. Only use with --read-test")
     args = parser.parse_args()
     init_logger()
-    client = Client(args.api_url)
+    client = Client(args.api_url, args.dry_run)
     if args.write_test:
         perf = write_test(client, args.concurrency, args.test_size)
         print 'Write test result:'
