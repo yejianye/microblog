@@ -44,6 +44,11 @@ def ansible_playbook(playbook, inventory, tags=None, limit=None, extra_vars=None
     )
     return local(command)
 
+def _bool(val):
+    if val.lower() in ['no', 'false']:
+        val = False
+    return bool(val)
+
 @task
 def provision(limit=None, tags=None, **extra_vars):
     '''Provision instances, including installing libraries and softwares and configure them properly
@@ -57,19 +62,21 @@ def provision(limit=None, tags=None, **extra_vars):
                         tags=tags, limit=limit, extra_vars=extra_vars)
 
 @task
-def aws_setup(tags=None):
+def aws_setup(tags=None, rds=True):
     '''Setup infrastructure on AWS including secruity group, ec2 instances etc.
 
     Args:
         tags: only execute tasks matching specific tags (comma-separated)
+        rds: whether changing rds from db.t2.micro to specific instance class
     '''
     ansible_playbook('aws_setup.yml', 'localhost,',tags=tags)
-    rds_conn = boto.rds.connect_to_region(aws_vars['region'])
-    for rds in aws_vars['rds_instances']:
-        print 'RDS: {} upgraded to {}'.format(rds['name'], rds['instance_class'])
-        rds_conn.modify_dbinstance(rds['name'],
-                                   instance_class=rds['instance_class'],
-                                   apply_immediately=True)
+    if _bool(rds):
+        rds_conn = boto.rds.connect_to_region(aws_vars['region'])
+        for rds in aws_vars['rds_instances']:
+            print 'RDS: {} upgraded to {}'.format(rds['name'], rds['instance_class'])
+            rds_conn.modify_dbinstance(rds['name'],
+                                    instance_class=rds['instance_class'],
+                                    apply_immediately=True)
 
 @task
 def aws_teardown(tags=None):

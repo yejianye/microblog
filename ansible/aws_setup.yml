@@ -21,7 +21,7 @@
     ec2:
       key_name: "{{ default_key_name }}"
       instance_type: "{{ item.instance_type }}"
-      image: "{{ default_ami }}"
+      image: "{{ item.ami }}"
       wait: yes
       group: "{{ item.security_groups }}"
       exact_count: 1
@@ -63,8 +63,38 @@
     with_items: launched_instances.results
     tags: ['route53']
 
-  # RDS
+  # # Elastic Cache
+  # - elasticache:
+  #     name: "{{ item.name }}"
+  #     state: present
+  #     engine: redis
+  #     node_type: "{{ item.node_type }}"
+  #     num_nodes: 1
+  #     cache_port: 6379
+  #     cache_subnet_group: "{{ cache_subnet }}"
+  #     security_group_ids: ['perf']
+  #     zone: "{{ default_az }}"
+  #     region: "{{ region }}"
+  #   with_items: cache_instances
+  #   register: launched_cache
+  #   tags: ['cache']
 
+  # - debug: var=launched_cache
+
+  # - name: Setup Cache DNS in private zone
+  #   route53:
+  #     command: create
+  #     zone: "{{ private_zone }}"
+  #     record: "{{ item.item.name }}.{{ private_zone }}"
+  #     type: CNAME
+  #     ttl: 30
+  #     private_zone: yes
+  #     overwrite: yes
+  #     value: "{{ item.tagged_instances[0].endpoint }}"
+  #   with_items: launched_cache.results
+  #   tags: ['route53']
+
+  # RDS
   # - rds:
   #     command: restore
   #     instance_name: "{{ item.name }}"

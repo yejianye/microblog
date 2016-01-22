@@ -4,4 +4,13 @@
   roles:
     - ANXS.hostname
     - common
+
+- hosts: perf-www
+  sudo: True
+  roles:
     - pylibs
+
+- hosts: perf-cache
+  sudo: True
+  roles:
+    - redis

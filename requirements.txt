@@ -6,4 +6,5 @@ PyMySQL==0.7.1
 gevent==1.0.2
 PyYAML==3.11
 redis==2.10.5
+msgpack-python==0.4.6
 

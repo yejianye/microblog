@@ -4,16 +4,17 @@ import requests
 class Client(object):
     def __init__(self, api_url):
         self.api_url = api_url
+        self.session = requests.Session()
 
     def _get(self, path, **kwargs):
-        resp = requests.get(self.api_url + path, params=kwargs)
+        resp = self.session.get(self.api_url + path, params=kwargs)
         if resp.status_code == 200:
             return resp.json()
         else:
             return {'err_code': resp.status_code, 'err_msg': resp.content}
 
     def _post(self, path, **kwargs):
-        resp = requests.post(self.api_url + path, json=kwargs)
+        resp = self.session.post(self.api_url + path, json=kwargs)
         if resp.status_code == 200:
             return resp.json()
         else:
