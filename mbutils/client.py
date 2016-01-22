@@ -12,10 +12,10 @@ class Client(object):
 
     def _get(self, path, **kwargs):
         if self.dry_run:
-            print 'GET {}{}?{}'.format(
+            print 'GET {}{}{}'.format(
                 self.api_url,
                 path,
-                urllib.urlencode(kwargs))
+                '?'+urllib.urlencode(kwargs) if kwargs else '')
             return
         resp = self.session.get(self.api_url + path, params=kwargs)
         if resp.status_code == 200:
