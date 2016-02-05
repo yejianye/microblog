@@ -45,7 +45,7 @@ def ansible_playbook(playbook, inventory, tags=None, limit=None, extra_vars=None
     return local(command)
 
 def _bool(val):
-    if val.lower() in ['no', 'false']:
+    if isinstance(val, basestring) and val.lower() in ['no', 'false']:
         val = False
     return bool(val)
 
